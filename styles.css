@@ -1358,8 +1358,13 @@ footer {
 @media (max-width: 768px) {
 
     .resume-grid,
-    .project-grid {
+    .project-grid,
+    .books-grid {
         grid-template-columns: 1fr;
+    }
+
+    .books-section {
+        padding: 4rem 5%;
     }
 
     .hero-section {
