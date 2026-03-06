@@ -145,8 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }, {
-        threshold: 0.15,
-        rootMargin: "0px 0px -50px 0px"
+        threshold: 0,
+        rootMargin: "0px 0px -100px 0px"
     });
 
     hiddenElements.forEach((el) => observer.observe(el));
@@ -251,23 +251,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (booksGrid) {
         booksData.forEach(book => {
             const cardHTML = `
-                <a href="${book.url}" target="_blank" class="book-card bounds-hover" style="animation-delay: ${book.delay}">
-                    <div class="card-corner tl"></div>
-                    <div class="card-corner tr"></div>
-                    <div class="card-corner bl"></div>
-                    <div class="card-corner br"></div>
-                    
-                    <div class="book-scanline"></div>
-                    
-                    <div class="book-content">
-                        <div class="book-header">
-                            <span class="book-id">${book.id}</span>
-                            <span class="book-status">DECRYPTED</span>
-                        </div>
-                        <h3 class="book-title">${book.title}</h3>
-                        <div class="book-hidden-details">
-                            <p class="book-desc">${book.desc}</p>
-                            <span class="book-action">[ ACCESS ARCHIVE ]</span>
+                <a href="${book.url}" target="_blank" class="book-item bounds-hover" style="animation-delay: ${book.delay}">
+                    <div class="book-spine">
+                        <span class="spine-text">${book.id}</span>
+                    </div>
+                    <div class="book-cover">
+                        <div class="cover-scanline"></div>
+                        <div class="cover-content">
+                            <div class="cover-header">
+                                <span class="cover-id">${book.id}</span>
+                                <span class="cover-status">DECRYPTED</span>
+                            </div>
+                            <h3 class="cover-title">${book.title}</h3>
+                            <div class="cover-hidden-details">
+                                <p class="cover-desc">${book.desc}</p>
+                                <span class="cover-action">[ O P E N ]</span>
+                            </div>
                         </div>
                     </div>
                 </a>
