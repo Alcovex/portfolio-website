@@ -1,6 +1,6 @@
 :root {
     /* Color Palette */
-    --bg-base: #0a0e0a;
+    --bg-base: #000000;
     --bg-panel: #111811;
     --bg-darker: #050705;
 
@@ -45,11 +45,6 @@ body {
     font-family: var(--font-mono);
     overflow-x: hidden;
     line-height: 1.6;
-    background-image:
-        linear-gradient(var(--grid-color) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-    background-size: 30px 30px;
-    background-position: center center;
 }
 
 /* =========================================================================
@@ -70,32 +65,30 @@ body {
 }
 
 .cursor-reticle {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     position: fixed;
     top: 0;
     left: 0;
     transform: translate(-50%, -50%);
     z-index: 9998;
     pointer-events: none;
-    transition: width 0.2s ease, height 0.2s ease, transform 0.1s ease-out;
+    border: 1px solid var(--primary);
+    border-radius: 50%;
+    transition: width 0.2s ease, height 0.2s ease, transform 0.1s ease-out, border-color 0.2s;
 }
 
 .cursor-reticle.active {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(74, 255, 74, 0.1);
 }
 
 .cursor-reticle.hovering-card {
-    width: 80px;
-    height: 80px;
-    transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.cursor-reticle .reticle-line {
-    position: absolute;
-    background-color: var(--primary-dim);
-    transition: background-color 0.2s;
+    width: 60px;
+    height: 60px;
+    border-color: var(--secondary);
+    background-color: rgba(0, 255, 255, 0.1);
 }
 
 /* Custom text inside cursor */
@@ -118,66 +111,27 @@ body {
     opacity: 1;
 }
 
-.cursor-reticle.active .reticle-line {
-    background-color: var(--primary);
+/* Smoke Particle System */
+.smoke-particle {
+    position: fixed;
+    pointer-events: none;
+    background-color: rgba(120, 120, 120, 0.6);
+    border-radius: 50%;
+    filter: blur(4px);
+    z-index: 9997;
+    animation: smoke-anim 1s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.reticle-line.vertical {
-    top: 10%;
-    bottom: 10%;
-    left: 50%;
-    width: 1px;
-    transform: translateX(-50%);
-}
+@keyframes smoke-anim {
+    0% {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(1);
+    }
 
-.reticle-line.horizontal {
-    left: 10%;
-    right: 10%;
-    top: 50%;
-    height: 1px;
-    transform: translateY(-50%);
-}
-
-.cursor-reticle .reticle-corner {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    border-color: var(--primary);
-    border-style: solid;
-    border-width: 0;
-    transition: all 0.2s;
-}
-
-.cursor-reticle.hovering-card .reticle-corner {
-    border-color: var(--secondary);
-}
-
-.reticle-corner.top-left {
-    top: 0;
-    left: 0;
-    border-top-width: 2px;
-    border-left-width: 2px;
-}
-
-.reticle-corner.top-right {
-    top: 0;
-    right: 0;
-    border-top-width: 2px;
-    border-right-width: 2px;
-}
-
-.reticle-corner.bottom-left {
-    bottom: 0;
-    left: 0;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-}
-
-.reticle-corner.bottom-right {
-    bottom: 0;
-    right: 0;
-    border-bottom-width: 2px;
-    border-right-width: 2px;
+    100% {
+        opacity: 0;
+        transform: translate(var(--dx), var(--dy)) scale(3);
+    }
 }
 
 /* =========================================================================

@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // Smoke system variables
+    let smokeTimer = null;
+
     // Update cursor position
     window.addEventListener('mousemove', (e) => {
         const posX = e.clientX;
@@ -42,7 +45,48 @@ document.addEventListener('DOMContentLoaded', () => {
             left: `${posX}px`,
             top: `${posY}px`
         }, { duration: 100, fill: "forwards" });
+
+        // Spawn smoke particle
+        createSmokeParticle(posX, posY);
+
+        // Reset timer to clear smoke when movement stops
+        clearTimeout(smokeTimer);
+        smokeTimer = setTimeout(() => {
+            clearAllSmoke();
+        }, 1000);
     });
+
+    function createSmokeParticle(x, y) {
+        const smoke = document.createElement('div');
+        smoke.className = 'smoke-particle';
+        smoke.style.left = `${x}px`;
+        smoke.style.top = `${y}px`;
+
+        // Randomize size
+        const size = Math.random() * 10 + 10; // 10px to 20px
+        smoke.style.width = `${size}px`;
+        smoke.style.height = `${size}px`;
+
+        // Randomize drift direction
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 40 + 20;
+        smoke.style.setProperty('--dx', `${Math.cos(angle) * distance}px`);
+        smoke.style.setProperty('--dy', `${Math.sin(angle) * distance - 20}px`); // Slight upward drift
+
+        document.body.appendChild(smoke);
+
+        // Remove particle after animation ends
+        setTimeout(() => {
+            if (smoke.parentNode) {
+                smoke.remove();
+            }
+        }, 1000);
+    }
+
+    function clearAllSmoke() {
+        const particles = document.querySelectorAll('.smoke-particle');
+        particles.forEach(p => p.remove());
+    }
 
     // Handle hover states
     interactiveElements.forEach(el => {
