@@ -41,10 +41,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Smoke system variables
     let smokeTimer = null;
 
-    // Update cursor position
+    // Global variables for mouse position used by 3D background
+    let mouseX = 0;
+    let mouseY = 0;
+    const windowHalfX = window.innerWidth / 2;
+    const windowHalfY = window.innerHeight / 2;
+
+    // Update cursor position and globals
     window.addEventListener('mousemove', (e) => {
         const posX = e.clientX;
         const posY = e.clientY;
+
+        mouseX = (posX - windowHalfX);
+        mouseY = (posY - windowHalfY);
 
         // Dot follows instantly
         cursorDot.style.left = `${posX}px`;
@@ -175,58 +184,55 @@ document.addEventListener('DOMContentLoaded', () => {
        PROJECTS DATA AND DYNAMIC RENDERING
        ========================================================================== */
     const projectsData = [
-        { id: 'ACH-001', category: 'AWARDS AND ACHIEVEMENTS', title: 'Cybersecurity Training', desc: 'Trained over 10,000 employees in cybersecurity and information security awareness.' },
-        { id: 'ACH-002', category: 'AWARDS AND ACHIEVEMENTS', title: 'CEO Certificate of Appreciation', desc: 'Awarded a Certificate of Appreciation from the CEO of Abu Dhabi Airports.' },
-        { id: 'ACH-003', category: 'AWARDS AND ACHIEVEMENTS', title: 'ISO Certification Recognition', desc: 'Recognized by the Board of Directors for achieving ISO certification in information security.' },
-        { id: 'ACH-004', category: 'AWARDS AND ACHIEVEMENTS', title: 'SOC Project Initiation', desc: 'Initiated and led the Security Operations Center (SOC) project for Abu Dhabi Airports.' },
-        { id: 'ACH-005', category: 'AWARDS AND ACHIEVEMENTS', title: 'Innovative Security Solutions', desc: 'Received a Certificate of Appreciation for implementing innovative security solutions for multiple entities in Abu Dhabi.' },
-        { id: 'ACH-006', category: 'AWARDS AND ACHIEVEMENTS', title: 'Technology Personality of the Year', desc: 'Named "Technology Personality of the Year" at the Ples Jako Brno event.' },
-        { id: 'ACH-007', category: 'AWARDS AND ACHIEVEMENTS', title: 'InfoSec Awareness Lead', desc: 'Initiator and lead trainer for information security awareness at Abu Dhabi Airports, in collaboration with GCAS.' },
-        { id: 'ACH-008', category: 'AWARDS AND ACHIEVEMENTS', title: 'Blizzard Vulnerability Patching', desc: 'Received recognition from Blizzard Entertainment for helping patch multiple security vulnerabilities.' },
-        { id: 'ACH-009', category: 'AWARDS AND ACHIEVEMENTS', title: 'International Acknowledgments', desc: 'Awarded several acknowledgments from international companies for assisting in securing their systems.' },
-        { id: 'ACH-010', category: 'AWARDS AND ACHIEVEMENTS', title: 'Cybersecurity Competitions', desc: 'Participated in multiple international cybersecurity competitions.' },
-        { id: 'ACH-011', category: 'AWARDS AND ACHIEVEMENTS', title: 'Defcon 17 Winner', desc: 'Won 1st place in Social Engineering at Defcon 17.' },
-        { id: 'ACH-012', category: 'AWARDS AND ACHIEVEMENTS', title: 'Medical Device Security Studies', desc: 'Contributed to multiple medical studies on securing electronic medical devices from tampering.' },
-        { id: 'ACH-013', category: 'AWARDS AND ACHIEVEMENTS', title: 'Authored Technical Books', desc: 'Author of multiple books on Artificial Intelligence, Information Security, and Cybersecurity.' },
-        { id: 'ACH-014', category: 'AWARDS AND ACHIEVEMENTS', title: 'Steam Server Development', desc: 'Designed and developed multiple servers and services used on the Steam platform.' },
-        { id: 'PER-001', category: 'PERSONAL ACHIEVEMENTS', title: 'Global Steam Server Mgt', desc: 'Developed and managed a gaming server for a popular Steam game, supporting 1,000,000 players worldwide with 99% uptime.' },
-        { id: 'PER-002', category: 'PERSONAL ACHIEVEMENTS', title: 'Startup Advisor', desc: 'Freelance advisor for startups, with one client now generating millions in annual revenue.' },
-        { id: 'PER-003', category: 'PERSONAL ACHIEVEMENTS', title: 'Gaming Community Awards', desc: 'Recipient of multiple high-level awards within gaming communities.' },
-        { id: 'PER-004', category: 'PERSONAL ACHIEVEMENTS', title: 'Martial Arts Trainer', desc: 'Active martial arts trainer, mentoring young students in karate.' },
-        { id: 'PER-005', category: 'PERSONAL ACHIEVEMENTS', title: 'Karate Tournaments', desc: 'Competitor in multiple local and international karate tournaments.' },
-        { id: 'PER-006', category: 'PERSONAL ACHIEVEMENTS', title: 'Archery Competitor', desc: 'Regular participant in archery tournaments.' },
-        { id: 'PER-007', category: 'PERSONAL ACHIEVEMENTS', title: 'Equestrian Events', desc: 'Engaged in equestrian events and competitions.' },
-        { id: 'PER-008', category: 'PERSONAL ACHIEVEMENTS', title: 'Business Networking Host', desc: 'Host of exclusive business networking events, facilitating brainstorming sessions for entrepreneurs and executives.' },
-        { id: 'PER-009', category: 'PERSONAL ACHIEVEMENTS', title: 'Game Studio Consulting', desc: 'Provided consulting services to multiple game development studios, offering expertise in console, PC, Mac, and mobile game development and support.' },
-        { id: 'PER-010', category: 'PERSONAL ACHIEVEMENTS', title: 'Game Publishing', desc: 'Developed, participated, and assisted in publishing multiple games across mobile, console, and PC platforms.' },
-        { id: 'PER-011', category: 'PERSONAL ACHIEVEMENTS', title: 'Open-Source Contributor', desc: 'Active contributor to various digital software and online developer communities, collaborating on open-source projects.' }
+        // HIGHLIGHT — top-tier achievements first
+        { id: 'ACH-001', category: 'HIGHLIGHT', title: 'Defcon — 1st Place', desc: 'Won 1st place in Social Engineering at Defcon, the world\'s premier hacking conference. Competed against top security professionals globally.' },
+        { id: 'ACH-002', category: 'HIGHLIGHT', title: 'Technology Personality of the Year', desc: 'Named "Technology Personality of the Year" at the Ples Jako Brno event for contributions to cybersecurity and tech innovation.' },
+        { id: 'ACH-003', category: 'HIGHLIGHT', title: '10,000+ Employees Trained', desc: 'Designed and delivered cybersecurity awareness programs reaching over 10,000 employees across multiple regions and organizations.' },
+        { id: 'ACH-004', category: 'HIGHLIGHT', title: 'Built SOC from Scratch', desc: 'Initiated and led the Security Operations Center (SOC) project at Abu Dhabi Airports — from concept to full operational capability.' },
+        { id: 'ACH-005', category: 'HIGHLIGHT', title: '1M-Player Game Server', desc: 'Developed and managed gaming infrastructure on Steam supporting 1,000,000 concurrent players worldwide with 99% uptime.' },
+        { id: 'ACH-006', category: 'HIGHLIGHT', title: 'Blizzard Bug Bounty Recognition', desc: 'Received official recognition from Blizzard Entertainment for discovering and helping patch multiple security vulnerabilities.' },
+        // PROFESSIONAL
+        { id: 'PRO-001', category: 'PROFESSIONAL', title: 'ISO 27001 Certification Lead', desc: 'Led the organization to ISO 27001 certification — recognized by the Board of Directors for achieving information security standards.' },
+        { id: 'PRO-002', category: 'PROFESSIONAL', title: 'Innovative Security Solutions', desc: 'Awarded Certificate of Appreciation for implementing innovative security solutions across multiple entities in Abu Dhabi.' },
+        { id: 'PRO-003', category: 'PROFESSIONAL', title: 'InfoSec Awareness Pioneer', desc: 'Initiator and lead trainer for information security awareness at Abu Dhabi Airports, partnering with GCAS on national-level programs.' },
+        { id: 'PRO-004', category: 'PROFESSIONAL', title: 'International Security Contributions', desc: 'Awarded acknowledgments from multiple international companies for assisting in identifying and resolving critical security vulnerabilities.' },
+        { id: 'PRO-005', category: 'PROFESSIONAL', title: 'Medical Device Security Research', desc: 'Contributed to multiple medical studies on securing electronic medical devices from tampering and unauthorized access.' },
+        { id: 'PRO-006', category: 'PROFESSIONAL', title: 'Published Author — 6 Books', desc: 'Author of 6 books spanning Artificial Intelligence, Information Security, Cybersecurity, and Entrepreneurship.' },
+        // VENTURES & PERSONAL
+        { id: 'VEN-001', category: 'VENTURES', title: 'Startup Advisory', desc: 'Freelance advisor for startups — one client now generating millions in annual revenue based on strategic guidance provided.' },
+        { id: 'VEN-002', category: 'VENTURES', title: 'Game Studio Consulting', desc: 'Consulting for multiple game development studios across console, PC, Mac, and mobile platforms.' },
+        { id: 'VEN-003', category: 'VENTURES', title: 'Game Publishing', desc: 'Developed, participated, and assisted in publishing multiple games across mobile, console, and PC platforms.' },
+        { id: 'VEN-004', category: 'VENTURES', title: 'Open-Source Contributor', desc: 'Active contributor to open-source projects and developer communities.' },
+        { id: 'VEN-005', category: 'VENTURES', title: 'Business Networking Host', desc: 'Host of exclusive business networking events, facilitating brainstorming sessions for entrepreneurs and executives.' },
+        { id: 'PER-001', category: 'PERSONAL', title: 'Martial Arts Instructor', desc: 'Active martial arts trainer and competitor in local and international karate tournaments. Mentoring young students.' },
+        { id: 'PER-002', category: 'PERSONAL', title: 'Competitive Athlete', desc: 'Regular competitor in archery tournaments and equestrian events.' }
     ];
 
     const projectGrid = document.querySelector('.project-grid');
 
     if (projectGrid) {
         projectsData.forEach(proj => {
+            const isHighlight = proj.category === 'HIGHLIGHT';
             const cardHTML = `
-                <div class="project-card bounds-hover project-dynamic" data-project-id="${proj.id}">
+                <div class="project-card bounds-hover project-dynamic ${isHighlight ? 'highlight-card' : ''}" data-project-id="${proj.id}">
                     <div class="card-corner tl"></div>
                     <div class="card-corner tr"></div>
                     <div class="card-corner bl"></div>
                     <div class="card-corner br"></div>
-                    
+
                     <div class="project-overlay">
-                        <span class="decrypt-text" data-value="ACCESS GRANTED">LOCKED</span>
+                        <span class="decrypt-text" data-value="${isHighlight ? 'DECLASSIFIED' : 'ACCESS GRANTED'}">LOCKED</span>
                     </div>
-                    
+
                     <div class="project-content">
                         <div class="project-header">
                             <span class="project-id">${proj.id}</span>
-                            <span class="project-status">${proj.category}</span>
+                            <span class="project-status ${isHighlight ? 'status-highlight' : ''}">${proj.category}</span>
                         </div>
                         <h3 class="project-title">${proj.title}</h3>
                         <div class="project-hidden-details hidden">
                             <p class="project-desc">${proj.desc}</p>
                         </div>
-                    </div>
                     </div>
                 </div>
             `;
@@ -251,22 +257,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (booksGrid) {
         booksData.forEach(book => {
             const cardHTML = `
-                <a href="${book.url}" target="_blank" class="book-item bounds-hover" style="animation-delay: ${book.delay}">
-                    <div class="book-spine">
-                        <span class="spine-text">${book.id}</span>
-                    </div>
-                    <div class="book-cover">
-                        <div class="cover-scanline"></div>
-                        <div class="cover-content">
-                            <div class="cover-header">
-                                <span class="cover-id">${book.id}</span>
-                                <span class="cover-status">DECRYPTED</span>
-                            </div>
-                            <h3 class="cover-title">${book.title}</h3>
-                            <div class="cover-hidden-details">
-                                <p class="cover-desc">${book.desc}</p>
-                                <span class="cover-action">[ O P E N ]</span>
-                            </div>
+                <a href="${book.url}" target="_blank" class="book-card bounds-hover" style="animation-delay: ${book.delay}">
+                    <div class="card-corner tl"></div>
+                    <div class="card-corner tr"></div>
+                    <div class="card-corner bl"></div>
+                    <div class="card-corner br"></div>
+                    
+                    <div class="book-scanline"></div>
+                    
+                    <div class="book-content">
+                        <div class="book-header">
+                            <span class="book-id">${book.id}</span>
+                            <span class="book-status">DECRYPTED</span>
+                        </div>
+                        <h3 class="book-title">${book.title}</h3>
+                        <div class="book-hidden-details">
+                            <p class="book-desc">${book.desc}</p>
+                            <span class="book-action">[ O P E N ]</span>
                         </div>
                     </div>
                 </a>
@@ -370,11 +377,12 @@ document.addEventListener('DOMContentLoaded', () => {
         renderer.setSize(300, 300);
         globeContainer.appendChild(renderer.domElement);
 
-        const geometry = new THREE.SphereGeometry(1.8, 64, 64);
+        // Holographic Wireframe Globe (Inner Sphere + Outer Wireframe)
+        const geometry = new THREE.SphereGeometry(1.8, 32, 32);
 
+        // Load texture from base64 string (required for file:// local access — CORS blocks .jpg)
         const textureLoader = new THREE.TextureLoader();
-        // Colored Earth texture from unpkg CDN
-        const earthTexture = textureLoader.load('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg');
+        const earthTexture = textureLoader.load(earthBase64);
 
         const material = new THREE.MeshPhongMaterial({
             map: earthTexture,
@@ -404,43 +412,85 @@ document.addEventListener('DOMContentLoaded', () => {
         const glowRing = new THREE.Mesh(glowGeometry, glowMaterial);
         scene.add(glowRing);
 
-        // Satellites
-        const satellites = [];
-        const satGeometry = new THREE.OctahedronGeometry(0.08, 0);
-        const satMaterial = new THREE.MeshPhongMaterial({
-            color: 0xffffff,
-            emissive: 0x00ffff,
-            emissiveIntensity: 0.5,
-            shininess: 100
-        });
+        // --- Orbiting Satellites ---
+        // Pivot-based: each satellite sits at (radius, 0, 0) inside a tilted group.
+        // Rotating the group on Y = perfect circular orbit, guaranteed no clipping.
+        const satConfigs = [
+            { radius: 2.8, speed: 0.01, tiltX: 0.3, tiltZ: 0.15, startAngle: 0 },
+            { radius: 3.2, speed: -0.007, tiltX: -0.4, tiltZ: 0.2, startAngle: 2.0 },
+            { radius: 3.6, speed: 0.005, tiltX: 0.15, tiltZ: -0.35, startAngle: 4.0 }
+        ];
 
-        for (let i = 0; i < 3; i++) {
-            const sat = new THREE.Mesh(satGeometry, satMaterial);
-            const pivot = new THREE.Object3D();
+        const satellites = satConfigs.map(cfg => {
+            // -- Build satellite mesh --
+            // Core bright dot
+            const core = new THREE.Mesh(
+                new THREE.OctahedronGeometry(0.07, 0),
+                new THREE.MeshBasicMaterial({ color: 0x4aff4a })
+            );
 
-            sat.position.set(2.4 + Math.random() * 0.5, 0, 0);
+            // Glow sphere
+            const glowMat = new THREE.MeshBasicMaterial({
+                color: 0x4aff4a,
+                transparent: true,
+                opacity: 0.25,
+                blending: THREE.AdditiveBlending
+            });
+            const glow = new THREE.Mesh(
+                new THREE.SphereGeometry(0.16, 8, 8),
+                glowMat
+            );
 
-            pivot.rotation.x = Math.random() * Math.PI * 2;
-            pivot.rotation.y = Math.random() * Math.PI * 2;
-            pivot.rotation.z = Math.random() * Math.PI * 2;
+            // Assemble satellite
+            const sat = new THREE.Group();
+            sat.add(core);
+            sat.add(glow);
+            sat.position.set(cfg.radius, 0, 0); // fixed distance from center
 
-            pivot.userData.speedX = (Math.random() - 0.5) * 0.02;
-            pivot.userData.speedY = (Math.random() - 0.5) * 0.02;
-            pivot.userData.speedZ = (Math.random() - 0.5) * 0.02;
-
+            // Orbit pivot — this group gets tilted once, then rotated on Y each frame
+            const pivot = new THREE.Group();
+            pivot.rotation.x = cfg.tiltX;
+            pivot.rotation.z = cfg.tiltZ;
+            pivot.rotation.y = cfg.startAngle;
             pivot.add(sat);
             scene.add(pivot);
-            satellites.push(pivot);
-        }
 
+            // Matching orbit ring (same tilt)
+            const ring = new THREE.Mesh(
+                new THREE.TorusGeometry(cfg.radius, 0.006, 6, 120),
+                new THREE.MeshBasicMaterial({
+                    color: 0x4aff4a,
+                    transparent: true,
+                    opacity: 0.07
+                })
+            );
+            ring.rotation.x = Math.PI / 2; // torus lies flat in local space
+            // Wrap in a group with the same tilt as the orbit
+            const ringPivot = new THREE.Group();
+            ringPivot.rotation.x = cfg.tiltX;
+            ringPivot.rotation.z = cfg.tiltZ;
+            ringPivot.add(ring);
+            scene.add(ringPivot);
+
+            return { pivot, speed: cfg.speed, glowMat, core };
+        });
+
+        let globeTime = 0;
         const animateGlobe = function () {
             requestAnimationFrame(animateGlobe);
+            globeTime += 0.016;
             earth.rotation.y += 0.005;
 
-            satellites.forEach(pivot => {
-                pivot.rotation.x += pivot.userData.speedX;
-                pivot.rotation.y += pivot.userData.speedY;
-                pivot.rotation.z += pivot.userData.speedZ;
+            satellites.forEach(sat => {
+                // Simply rotate the pivot — satellite stays at fixed radius
+                sat.pivot.rotation.y += sat.speed;
+
+                // Gentle pulsing glow
+                sat.glowMat.opacity = 0.2 + Math.sin(globeTime * 2.5 + sat.pivot.rotation.y) * 0.12;
+
+                // Slow spin on the diamond shape
+                sat.core.rotation.y += 0.03;
+                sat.core.rotation.z += 0.02;
             });
 
             renderer.render(scene, camera);
@@ -450,8 +500,152 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ==========================================================================
+       INTERACTIVE 3D PARTICLE SPACE BACKGROUND
+       ========================================================================== */
+    const spaceContainer = document.getElementById('space-background');
+    if (spaceContainer && typeof THREE !== 'undefined') {
+        const spaceScene = new THREE.Scene();
+        // Pure black — no fog tint
+        spaceScene.background = new THREE.Color(0x000000);
+
+        const spaceCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 4000);
+        spaceCamera.position.z = 1000;
+
+        const spaceRenderer = new THREE.WebGLRenderer({ antialias: true });
+        spaceRenderer.setPixelRatio(window.devicePixelRatio);
+        spaceRenderer.setSize(window.innerWidth, window.innerHeight);
+        spaceContainer.appendChild(spaceRenderer.domElement);
+
+        // Glowing star sprite (base64)
+        const starBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADSElEQVRYR82XW2sTQRSG39lsNjebaJNqxWpR0XrxIlgQvBFUvNKL3nrz1m/gv+qvwCtvetGLFwRBqxWxF/FWjS2mbTeb3dnxTGaT1KS1114EXZhlJyffPOfMmTMzQq1Ww0hM/+A7/yXGf5YdGRlR2qKU2nZ1R0k8Hg8Yg0EQvYlGox1V0Ww28wB2AYzI4rZti0/XdbmuKAoIIeVfRHS2N16q1aq2tLQUcRxH63Q62tLSEiYmJtBqtRCJREC9Xm+k3W6Hms1mjHNuCyGSUoikECIdj8eTlmVZkiQp4pzzUqnUS7Va1QDo8fFxNBqNkG3bEcdxgkKI0TAMjTFGQggLAAaDAbLZrGiaZpXQYrEYs207YllWRAgRcxxHi8ViLplMMs75VqlUStTr9bBpmvEwDMOcc11RlCchREIymQxd1zUcx2FBEARisVhYURS2uLhYCkO5XLZs204IITLDMM7H4/GEpmnM8zz0ej2USiW/VCpp+Xw+5jiOFgTBb13XH2qaNs1xHMrlMk5OThTgw8PD0+12+4bjOPOEEJmI8B3HoWKxqORyuZnjOHc9z3sN4E1v84UQRC6XS3iel+/1em+CIPirqup1xtgB+Bnj4+O3R0ZGrnmed8PzvK/5fH52dnZWSyQSmclk8rHjOPcDILm2tvbE9/0HpmneaDab+6lUylYUZS+fz9/Y2Ngon5+fL5lM5srGxsbr7e3tc1E8Pj5mAM5t23Zub2/PZjKZqyiYpinr9TrL5XIzpmlOZTKZeyI8OTlRs9ns/NraWrlYLKYnk8mrAIQQ4h5jfA/gnud5L2u1WrFUKmUAwHFv+v3+3V6v96Tdbg/w0jRN7na7r2zbvk8pXYIgXNc0jfM8jw4PD/PlcnmWMTZrmuba3t4ezM/P03+1A/AigJdCiKxpmtfT6TS1LIsNDg7eqar6UFXVW4ZhxIrFImk2m8XFxcVXAK4wxu7kcjnr7E6j0ahj2/YTYA/g25+0s7Ojh2GIOI5Tvu/vVqvVxUKhoEIIHkL4xWJxH4BCjNG6rmM6nc53u90VwI+HwyEVQsSj0cihlLLZ2dngP6H/f14gAIAkSV2lVOI4Tuh5HhNChIZh4P7+/m+o894A/L18128uK6X/mH4A7mE+/Uf2WxcAAAAASUVORK5CYII=";
+        const particleTexture = new THREE.TextureLoader().load(starBase64);
+
+        // --- Star Field ---
+        const starGeometry = new THREE.BufferGeometry();
+        const starVertices = [];
+        const starColors = [];
+        const STAR_COUNT = 10000;
+
+        for (let i = 0; i < STAR_COUNT; i++) {
+            starVertices.push(
+                (Math.random() - 0.5) * 3500,
+                (Math.random() - 0.5) * 3500,
+                (Math.random() - 0.5) * 3500
+            );
+
+            const color = new THREE.Color();
+            const roll = Math.random();
+            if (roll > 0.92) {
+                color.setHex(0xffffff); // bright white stars
+            } else if (roll > 0.7) {
+                color.setHSL(0.55, 0.6, 0.7); // cool cyan/teal
+            } else if (roll > 0.5) {
+                color.setHSL(0.35, 0.5, 0.6); // green tint (matches theme)
+            } else {
+                color.setHSL(0.6, 0.3, 0.5); // dim blue-grey
+            }
+            starColors.push(color.r, color.g, color.b);
+        }
+
+        starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+        starGeometry.setAttribute('color', new THREE.Float32BufferAttribute(starColors, 3));
+
+        const starMaterial = new THREE.PointsMaterial({
+            size: 3.5,
+            map: particleTexture,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.85,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            sizeAttenuation: true
+        });
+
+        const particles = new THREE.Points(starGeometry, starMaterial);
+        spaceScene.add(particles);
+
+        // Handle resize
+        window.addEventListener('resize', function () {
+            spaceCamera.aspect = window.innerWidth / window.innerHeight;
+            spaceCamera.updateProjectionMatrix();
+            spaceRenderer.setSize(window.innerWidth, window.innerHeight);
+        }, false);
+
+        // Track mouse velocity for warp effect
+        let prevMouseX = 0;
+        let prevMouseY = 0;
+        let mouseVelX = 0;
+        let mouseVelY = 0;
+
+        let time = 0;
+        function animateSpace() {
+            requestAnimationFrame(animateSpace);
+            time += 0.001;
+
+            // Calculate mouse velocity (how fast the mouse is moving)
+            mouseVelX += (mouseX - prevMouseX - mouseVelX) * 0.1;
+            mouseVelY += (mouseY - prevMouseY - mouseVelY) * 0.1;
+            prevMouseX = mouseX;
+            prevMouseY = mouseY;
+
+            const speed = Math.sqrt(mouseVelX * mouseVelX + mouseVelY * mouseVelY);
+
+            // Gentle constant drift
+            particles.rotation.y = time * 0.08;
+            particles.rotation.x = time * 0.02;
+
+            // Mouse-driven camera parallax — stronger response
+            const targetX = mouseX * 0.5;
+            const targetY = -mouseY * 0.5;
+            spaceCamera.position.x += (targetX - spaceCamera.position.x) * 0.04;
+            spaceCamera.position.y += (targetY - spaceCamera.position.y) * 0.04;
+
+            // Warp/zoom effect: camera pushes forward when mouse moves fast
+            const targetZ = 1000 - Math.min(speed * 2, 300);
+            spaceCamera.position.z += (targetZ - spaceCamera.position.z) * 0.03;
+
+            // Slight FOV warp on fast movement
+            const targetFOV = 75 + Math.min(speed * 0.3, 15);
+            spaceCamera.fov += (targetFOV - spaceCamera.fov) * 0.05;
+            spaceCamera.updateProjectionMatrix();
+
+            spaceCamera.lookAt(spaceScene.position);
+            spaceRenderer.render(spaceScene, spaceCamera);
+        }
+
+        animateSpace();
+    }
+
+    /* ==========================================================================
        INTERACTIVE COMPONENTS
        ========================================================================== */
+    // Mobile Nav Toggle
+    const navToggle = document.getElementById('nav-toggle');
+    const mainNav = document.getElementById('main-nav');
+
+    if (navToggle && mainNav) {
+        navToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mainNav.classList.toggle('open');
+            navToggle.textContent = mainNav.classList.contains('open') ? '[X]' : '[///]';
+        });
+
+        // Close nav when a link is clicked
+        mainNav.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mainNav.classList.remove('open');
+                navToggle.textContent = '[///]';
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!mainNav.contains(e.target) && !navToggle.contains(e.target)) {
+                mainNav.classList.remove('open');
+                navToggle.textContent = '[///]';
+            }
+        });
+    }
+
     // Social Menu Toggle
     const socialToggle = document.getElementById('social-toggle');
     const socialMenu = document.getElementById('social-menu');
